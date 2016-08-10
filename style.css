@@ -290,3 +290,12 @@ pre{
     background: #cdcdcd;
     margin: 50px 0;
 }
+
+div#map {
+    width: 500px;
+    height: 500px;
+    border:double;
+    left:200px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

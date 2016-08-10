@@ -9,7 +9,7 @@ $demo = new Demo();
 $admin_id = $demo->getDemoUser();
 ?>
 
-<html xmlns="http://www.w3.org/1999/html">
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
     <head>
         <title>SMARTe | UFAM</title>
         <meta charset="UTF-8">
@@ -211,12 +211,82 @@ $admin_id = $demo->getDemoUser();
                         <img src="loader.gif" id="loader_multiple" class="loader"/>
                     </p>
                 </div>
+
+                <div class="topics">
+                    <br/>
+                    <div class="separator"></div>
+                    <h2 class="heading">Alertar os familiares de:</h2>
+                    Selecione o noma da pessoa que você quer avisar os familiares<br/><br/>
+
+                    <div class="container">
+                        <select class="select_single"  id="select_patients" >
+                            <option selected disabled>Escolha um paciente</option>
+                            <?php foreach ($demo->getAllPatients() as $key => $user) { ?>
+                                <option value="<?= $user['user_id'] ?>"><?= $user['name'] ?> (<?= $user['email'] ?>)</option>
+                            <?php } ?>
+                        </select><br/>
+                        <div id="map"></div>
+                        lat:<span id='lat'></span>
+                        lon:<span id='lon'></span>
+                        <input id="send_to_family" type="button" value="Alertar os Familires" class="btn_send"/>
+                        <img src="loader.gif" id="loader_single" class="loader"/>
+                    </div>
             </div>
-            <br/><br/>
-            <br/><br/>
-            <br/><br/>
-        </div>
-<!--        https://github.com/select2/select2-->
+            </div>
+            <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6v5-2uaq_wusHDktM9ILcqIrlPtnZgEk&&signed_in=true&callback=initMap">
+            </script>
+            <script type="text/javascript">
+                var map;
+                var markers = [];
+
+                function initMap() {
+                    var haightAshbury = {lat: -3.099694, lng: -59.977691};
+
+                    map = new google.maps.Map(document.getElementById('map'), {
+                        zoom: 16,
+                        center: haightAshbury,
+                        mapTypeId: google.maps.MapTypeId.TERRAIN
+//                            mapTypeId: google.maps.MapTypeId.ROADMAP
+                    });
+
+                    // This event listener will call addMarker() when the map is clicked.
+                    map.addListener('click', function(event) {
+                        var clickLat = event.latLng.lat();
+                        var clickLon = event.latLng.lng();
+
+                        // show in input box
+                        document.getElementById("lat").innerHTML = clickLat;
+                        document.getElementById("lon").innerHTML = clickLon;
+
+
+                        addMarker(event.latLng);
+                    });
+
+                }
+
+                // Adds a marker to the map and push to the array.
+                function addMarker(location) {
+                    deleteMarkers();
+                    var marker = new google.maps.Marker({
+                        position: location,
+                        map: map
+                    });
+                    markers.push(marker);
+                }
+
+                // Sets the map on all markers in the array.
+                function setMapOnAll(map) {
+                    for (var i = 0; i < markers.length; i++) {
+                        markers[i].setMap(map);
+                    }
+                }
+
+                // Deletes all markers in the array by removing references to them.
+                function deleteMarkers() {
+                    setMapOnAll(null);
+                    markers = [];
+                }
+            </script>
 
         <script type="text/javascript">
             $(".js-example-basic-multiple-limit").select2({
@@ -240,7 +310,6 @@ $admin_id = $demo->getDemoUser();
                                 option.text = data.disponiveis[i].name;
                                 option.value = data.disponiveis[i].user_id;
                                 x.add(option);
-
                             }
 
                             $('#loader_single').hide();
@@ -256,10 +325,6 @@ $admin_id = $demo->getDemoUser();
                 }).always(function () {
                     $('#loader_single').hide();
                 });
-
-
-
-
             });
 
             $('input#insert_family').on('click', function () {
@@ -302,6 +367,40 @@ $admin_id = $demo->getDemoUser();
                 }
 
             });
+
+            $('input#send_to_family').on('click', function () {
+                var to = $('#select_patients').val();
+
+                console.log(to);
+                $('#select_patients').val('Escolha um paciente');
+                $('#loader_single').show();
+
+                var lat =document.getElementById("lat").innerHTML;
+                var long =document.getElementById("lon").innerHTML;
+
+
+                $.get("v1/users/alert/"+ to,
+                    {lat: lat, long: long},
+                    function (data) {
+                        console.log(data);
+                        if (data.error === false) {
+                            $('#loader_single').hide();
+                            alert('Uma notificação foi enviada para todos os familiares cadastrados.');
+                        } else {
+                            alert('Não foi possível enviar a mensagem, por favor tente mais tarde.');
+                        }
+                    }).done(function () {
+
+                }).fail(function () {
+                    alert('Não foi possível enviar a mensagem, por favor tente mais tarde.');
+                }).always(function () {
+                    $('#loader_single').hide();
+                });
+            });
         </script>
     </body>
 </html>
+
+<!--https://developers.google.com/maps/documentation/javascript/examples/marker-remove?hl=pt-br-->
+<!--https://developers.google.com/maps/documentation/static-maps/intro-->
+<!--        https://github.com/select2/select2-->

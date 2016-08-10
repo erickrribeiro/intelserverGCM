@@ -257,7 +257,8 @@ $app->post('/users/message', function() use ($app) {
 });
 
 $app->get('/users/alert/:id', function($id) use ($app) {
-
+    $latitude = doubleval($app->request->get('lat'));
+    $longitude = doubleval($app->request->get('long'));
     $response = array();
 
     require_once __DIR__ . '/../libs/gcm/gcm.php';
@@ -292,8 +293,8 @@ $app->get('/users/alert/:id', function($id) use ($app) {
     $data = array();
     $data['user'] = $user;
     $data['message'] = $msg;
-    $data['image'] = 'http://api.androidhive.info/gcm/panda.jpg';
-
+    $data['image'] = "https://maps.googleapis.com/maps/api/staticmap?center=$latitude,$longitude&zoom=16&size=400x400&key=AIzaSyDw21X58Gin5dqvlEh978nyQprBvTlEhiE";
+//    $data['image'] = "https://maps.googleapis.com/maps/api/staticmap?center=$latitude,$longitude&zoom=12&size=400x400&markers=color:blue|label:P|$latitude,$longitude&key=AIzaSyDw21X58Gin5dqvlEh978nyQprBvTlEhiE";
 
 //    $data = array();
 //    $data['user'] = $user;
@@ -308,7 +309,12 @@ $app->get('/users/alert/:id', function($id) use ($app) {
     // sending push message to multiple users
     $gcm->sendMultiple($registration_ids, $push->getPush());
 
+
     $response['error'] = false;
+    $response['latitude'] = $app->request->get('lat');
+    $response['longitude'] = $app->request->get('long');
+    $response['image'] = $data['image'];
+
 
     echoRespnse(200, $response);
 });
@@ -344,7 +350,9 @@ $app->post('/users/send_to_all', function() use ($app) {
     $data = array();
     $data['user'] = $user;
     $data['message'] = $msg;
-    $data['image'] = 'http://api.androidhive.info/gcm/panda.jpg';
+// key map static    AIzaSyDw21X58Gin5dqvlEh978nyQprBvTlEhiE
+//    "https://maps.googleapis.com/maps/api/staticmap?center=-3.1003528890498,-59.976722449173&zoom=12&size=400x400&markers=color:blue|label:P|-3.1003528890498,-59.976722449173&key=AIzaSyDw21X58Gin5dqvlEh978nyQprBvTlEhiE"
+    $data['image'] = 'https://maps.googleapis.com/maps/api/staticmap?center=40.714728,-73.998672&zoom=12&size=400x400&key=AIzaSyDw21X58Gin5dqvlEh978nyQprBvTlEhiE';
 
     $push->setTitle("SMARTe Informa");
     $push->setIsBackground(FALSE);

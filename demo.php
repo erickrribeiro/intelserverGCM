@@ -34,6 +34,14 @@ class Demo {
         return $tasks;
     }
 
+    public function getAllPatients(){
+        $stmt = $this->conn->prepare("SELECT user_id, name, email FROM users WHERE users.user_id in (SELECT idPaciente FROM paciente_familiar)");
+        $stmt->execute();
+        $tasks = $stmt->get_result();
+        $stmt->close();
+        return $tasks;
+    }
+
     public function getDemoUser() {
         $name = 'AndroidHive';
         $email = 'admin@androidhive.info';
