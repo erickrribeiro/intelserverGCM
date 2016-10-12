@@ -3,7 +3,7 @@
  * Database configuration
  */
 define('DB_USERNAME', 'root');
-define('DB_PASSWORD', 'edinelza');
+define('DB_PASSWORD', '36810869');
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'intel');
 
