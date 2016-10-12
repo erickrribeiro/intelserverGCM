@@ -286,6 +286,8 @@ $app->get('/users/alert/:id', function($id) use ($app) {
 
     $msg = array();
     $msg['message'] = "EEEi mano o maluco caiu, corre lá";
+    $msg['latitude'] = $app->request->get('lat');
+    $msg['longitude'] = $app->request->get('long');
     $msg['message_id'] = '';
     $msg['chat_room_id'] = '';
     $msg['created_at'] = date('Y-m-d G:i:s');
@@ -293,8 +295,9 @@ $app->get('/users/alert/:id', function($id) use ($app) {
     $data = array();
     $data['user'] = $user;
     $data['message'] = $msg;
-    $data['image'] = "https://maps.googleapis.com/maps/api/staticmap?center=$latitude,$longitude&zoom=16&size=400x400&key=AIzaSyDw21X58Gin5dqvlEh978nyQprBvTlEhiE";
-//    $data['image'] = "https://maps.googleapis.com/maps/api/staticmap?center=$latitude,$longitude&zoom=12&size=400x400&markers=color:blue|label:P|$latitude,$longitude&key=AIzaSyDw21X58Gin5dqvlEh978nyQprBvTlEhiE";
+    $data['image'] = utf8_encode("https://maps.googleapis.com/maps/api/staticmap?center=$latitude,$longitude&zoom=16&size=400x400&key=AIzaSyDw21X58Gin5dqvlEh978nyQprBvTlEhiE");
+
+//    $data['image'] = utf8_encode("https://maps.googleapis.com/maps/api/staticmap?center=$latitude,$longitude&zoom=12&size=400x400&markers=color:blue|label:P|$latitude,$longitude&key=AIzaSyDw21X58Gin5dqvlEh978nyQprBvTlEhiE");
 
 //    $data = array();
 //    $data['user'] = $user;
@@ -311,9 +314,8 @@ $app->get('/users/alert/:id', function($id) use ($app) {
 
 
     $response['error'] = false;
-    $response['latitude'] = $app->request->get('lat');
-    $response['longitude'] = $app->request->get('long');
-    $response['image'] = $data['image'];
+    $response['payload'] = $data;
+
 
 
     echoRespnse(200, $response);
