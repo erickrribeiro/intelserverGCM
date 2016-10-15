@@ -22,6 +22,7 @@ $admin_id = $demo->getDemoUser();
     <link href='https://fonts.googleapis.com/css?family=Raleway:400,800,100' rel='stylesheet' type='text/css'>
     <link href='style.css' rel='stylesheet' type='text/css'>
     <link href='http://api.androidhive.info/gcm/styles/default.css' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 
     <script type="text/javascript">
         var user_id = '<?= $admin_id ?>';
@@ -116,6 +117,16 @@ $admin_id = $demo->getDemoUser();
 </head>
 <body>
 <div class="header">
+    <!--<b id="logout"><a href="logout.php">Log Out</a></b>-->
+    <!--<a id="logout" style="position:fixed ;top:0px;right:0px;" title="Logout" href="logout.php">
+        <i class="fa fa-sign-out"></i>
+        Logout
+    </a>-->
+
+    <a id="logout" class="btn btn-default btn-sm" href="logout.php" style="position:fixed ;top:0px;right:0px;">
+        <i class="fa fa-sign-out"></i> Logout</a>
+
+
     <h2>SMARTe - System for Monitoring heAlth and ReporTing Event</h2>
     <h2 class="small">Universidade Federal do Amazonas - UFAM</h2>
 </div>
