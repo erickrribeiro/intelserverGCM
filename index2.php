@@ -1,4 +1,4 @@
-<?php
+<?php session_start();
 error_reporting(-1);
 ini_set('display_errors', 'On');
 ?>
@@ -138,8 +138,8 @@ $admin_id = $demo->getDemoUser();
     </div>
 
     <div class="topics">
-        <br/>
-        <!--<div class="separator"></div>
+        <!--<br/>
+        <div class="separator"></div>
         <h2 class="heading">Sending message to `Single User`</h2>
         Select your name from the below recipients and send a message<br/><br/>
 
@@ -183,11 +183,15 @@ $admin_id = $demo->getDemoUser();
         -->
         <div class="separator"></div>
         <h2 class="heading">Cadastrando familiares</h2>
-        Selecione um paciente<br/><br/>
 
+        <p>Familiares de: <?=$_SESSION['login_user']?></p>
+        <?php $iduser = $demo->getUserID($_SESSION['login_user']);?>
+        <!-- Selecione um paciente<br/><br/>
+        echo $iduser; ?>
         <div class="container">
             <select id="paciente">
                 <?php
+
                 $users = $demo->getAllUsers();
                 foreach ($users as $key => $user) {
                     ?>
@@ -196,20 +200,19 @@ $admin_id = $demo->getDemoUser();
                 }
                 ?>
             </select>
-        </div>
+        </div>-->
         <div class="container">
 
             <p>
                 Familiares
                 <select id="family" class="js-example-basic-multiple-limit js-states form-control" multiple="multiple" style="width: 500px">
                 </select>
-                <input id="insert_family" type="button" value="Cadastrar familiares" class="btn"/>
+                <input onclick="insert_family(<?=$iduser ?>)" id="insert_family" type="button" value="Cadastrar familiares" class="btn"/>
                 <img src="loader.gif" id="loader_multiple" class="loader"/>
             </p>
         </div>
 
         <div class="topics">
-            <br/>
             <div class="separator"></div>
             <h2 class="heading">Alertar os familiares de:</h2>
             Selecione o nome da pessoa que você quer avisar os familiares<br/><br/>
@@ -278,7 +281,9 @@ $admin_id = $demo->getDemoUser();
         $(".js-example-basic-multiple-limit").select2({
             maximumSelectionLength: 10
         });
-        $('#paciente').on('change', function () {
+
+        //('#paciente').on('change', function () {
+
             var paciente = $('#paciente').val();
             console.log(paciente);
             var x = document.getElementById("family");
@@ -302,12 +307,15 @@ $admin_id = $demo->getDemoUser();
             }).always(function () {
                 $('#loader_single').hide();
             });
-        });
-        $('input#insert_family').on('click', function () {
+        //});
+        //$('input#insert_family').on('click', function () {
+        function insert_family(paciente) {
+
             var familia = $('#family').val();
-            var paciente = $('#paciente').val();
+
             console.log(paciente);
             console.log(familia);
+
             var save =  true;
             for(var i=0; i < familia.length; i++){
                 console.log(familia[i]);
@@ -332,7 +340,7 @@ $admin_id = $demo->getDemoUser();
             }else{
                 alert('Desculpa! Não foi possivel cadastrar o familiar.');
             }
-        });
+        }
         $('input#send_to_family').on('click', function () {
             var to = $('#select_patients').val();
             console.log(to);
