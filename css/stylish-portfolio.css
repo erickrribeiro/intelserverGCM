@@ -270,6 +270,49 @@ footer {
     width: 100%;
 }
 
+.redondo {
+    width: 200px;
+    height: 200px;
+    background-color: #000;
+    color: #FFF;
+
+    /* Agora a mágica */
+    border-radius: 50%;
+}
+
+.big-btn{
+    padding: 10px 0px 11px 0px;
+    width: 215px;
+    margin-top:5px;
+}
+
+.android-btn{
+
+    width: 240px;
+    padding: 13px 17px 13px 0px;
+    background-color: #000;
+    border-color: #000;
+}
+
+.android-btn:hover{
+    background-color: #272727;
+}
+
+.android-btn i{
+    font-size: 55px;
+}
+
+.android-btn .btn-text{
+    margin-top: 0px;
+}
+
+.android-btn strong{
+    font-size: 25px;
+    text-shadow: none;
+    color: #fff;
+    line-height: 24px;
+}
+
 /* Extra styles for the cancel button */
 .cancelbtn {
     width: auto;
